@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-config
+  labels:
+    app: django-config
+data:
+  SECRET_KEY: "supersecretkey"
+  DEBUG: "False"
+  ALLOWED_HOSTS: "*"
+  POSTGRES_DATABASE_ENGINE: "django.db.backends.postgresql"
+  POSTGRES_DATABASE_NAME: "appdatabase"
+  POSTGRES_USER:  "appuser"
+  POSTGRES_PASSWORD: "appuser"
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+

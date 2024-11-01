@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker
+  labels:
+    app: celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: celery-worker
+  template:
+    metadata:
+      labels:
+        name: celery-worker
+        tier: backend
+    spec:
+      containers:
+        - name: celery-worker
+          image: lokraj234/djangok8:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args: ["-c", "celery -A app worker --loglevel=info"]
+          env:
+            - name: POSTGRES_USER
+              value: "appuser"
+
+            - name: POSTGRES_PASSWORD
+              value: "appuser"
+
+            - name: POSTGRES_HOST
+              value: "postgres"
+
+            - name: REDIS_HOST
+              value: redis
+
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: "250m"
+            limits:
+              memory: 512Mi
+              cpu: "250m"
+
+          # volume mounts if required

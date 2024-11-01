@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-nginx
+  labels:
+    app: django-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-nginx
+  template:
+    metadata:
+      labels:
+        app: django-nginx
+    spec:
+      containers:
+        - name: django-nginx
+          image: lokraj234/nginxdjangok8:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 80
+              name: django-nginx
+          # volumemounts
+          volumeMounts:
+            - name: media-volume-mount
+              mountPath: /vol/shared   # Directory inside the Nginx container
+            - name: log-storage
+              mountPath: /var/logs/nginx # Directory for logs
+
+      volumes:
+        - name: media-volume-mount
+          persistentVolumeClaim:
+            claimName: django-pvc
+        - name: log-storage
+          persistentVolumeClaim:
+            claimName: log-pvc
+      restartPolicy: Always
